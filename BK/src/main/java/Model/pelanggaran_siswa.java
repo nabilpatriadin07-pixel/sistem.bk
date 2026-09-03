@@ -1,13 +1,16 @@
 
 package Model;
 
+
+import java.sql.Date;
+
 public class pelanggaran_siswa {
-    public date tanggal;
+    public Date tanggal;
     public int poin;
     public String keterangan;
     public String status;
 
-    public pelanggaran_siswa(date tanggal,int poin,String keterangan,String status) {
+    public pelanggaran_siswa(Date tanggal,int poin,String keterangan,String status) {
         this.tanggal = tanggal;
         this.poin = poin;
         this.keterangan = keterangan;
