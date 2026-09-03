@@ -29,8 +29,14 @@ public class DatabaseConnection {
 
         try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM siswa");
             ResultSet hasil = stmt.executeQuery()) {
-            while (hasil.next()){
-                
+               while (hasil.next()) {
+                Siswa siswa = new Siswa(
+                    hasil.getString("nisn"),
+                    hasil.getString("nama_siswa"),
+                    hasil.getString("kelas"),
+                    hasil.getString("jenis_kelamin")
+                );
+                     daftar.add(siswa);
             }
         }
 
