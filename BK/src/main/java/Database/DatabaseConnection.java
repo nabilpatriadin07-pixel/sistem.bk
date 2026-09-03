@@ -27,19 +27,52 @@ public class DatabaseConnection {
     public ArrayList<Siswa> get_siswa() throws SQLException {
         ArrayList<Siswa> daftar = new ArrayList();
 
-        try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM siswa");
-            ResultSet hasil = stmt.executeQuery()) {
-               while (hasil.next()) {
+        String sql = """
+            SELECT 
+                siswa.nisn,
+                siswa.nama_siswa,
+                siswa.kelas,
+                COALESCE(SUM(pelanggaran_siswa.poin), 0) AS total_poin
+            FROM siswa
+            LEFT JOIN pelanggaran_siswa
+                ON siswa.nisn = pelanggaran_siswa.nisn
+            GROUP BY
+                siswa.nisn,
+                siswa.nama_siswa,
+                siswa.kelas
+            """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet hasil = stmt.executeQuery()) {
+            while (hasil.next()) {
                 Siswa siswa = new Siswa(
                     hasil.getString("nisn"),
                     hasil.getString("nama_siswa"),
                     hasil.getString("kelas"),
-                    hasil.getString("jenis_kelamin")
+                    hasil.getInt("total_poin")
                 );
-                     daftar.add(siswa);
+
+                daftar.add(siswa);
             }
         }
 
         return daftar;
+    }
+
+    public void add_siswa(Siswa siswa) throws SQLException {
+
+       String sql = """
+            INSERT INTO siswa
+            (nisn, nama_siswa, kelas)
+            VALUES (?, ?, ?)
+            """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, siswa.nisn);
+            stmt.setString(2, siswa.nama_siswa);
+            stmt.setString(3, siswa.kelas);
+
+            stmt.executeUpdate();
+        }
     }
 }

@@ -9,12 +9,14 @@ public class Siswa {
     public String nisn;
     public String nama_siswa;
     public String kelas;
-    public String jenis_kelamin;
+     public int total_poin;
 
-    public Siswa(String nisn, String nama_siswa, String kelas, String jenis_kelamin) {
+    public Siswa(String nisn, String nama_siswa, String kelas,int total_poin) {
         this.nisn = nisn;
         this.nama_siswa = nama_siswa;
         this.kelas = kelas;
-        this.jenis_kelamin = jenis_kelamin;
+          this.total_poin = total_poin;
+
+  
     }
 }
