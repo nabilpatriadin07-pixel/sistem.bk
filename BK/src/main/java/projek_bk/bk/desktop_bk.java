@@ -9,6 +9,7 @@ import Model.Siswa;
 import javax.swing.JOptionPane;
 import java.sql.*;
 import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
 
 
 public class desktop_bk extends javax.swing.JFrame {
@@ -18,7 +19,9 @@ public class desktop_bk extends javax.swing.JFrame {
      */
     public desktop_bk() {
         initComponents();
+        loadDataSiswa();
     }
+  
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -57,9 +60,9 @@ public class desktop_bk extends javax.swing.JFrame {
         txtNisn = new javax.swing.JTextField();
         TP = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        Simpan1 = new javax.swing.JButton();
-        cancel1 = new javax.swing.JButton();
+        tblSiswa = new javax.swing.JTable();
+        btnSimpan = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
         Search = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
@@ -235,7 +238,7 @@ public class desktop_bk extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblSiswa.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -246,19 +249,19 @@ public class desktop_bk extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblSiswa);
 
-        Simpan1.setText("Input Data");
-        Simpan1.addActionListener(new java.awt.event.ActionListener() {
+        btnSimpan.setText("Input Data");
+        btnSimpan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Simpan1ActionPerformed(evt);
+                btnSimpanActionPerformed(evt);
             }
         });
 
-        cancel1.setText("Cancel");
-        cancel1.addActionListener(new java.awt.event.ActionListener() {
+        btnCancel.setText("Cancel");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancel1ActionPerformed(evt);
+                btnCancelActionPerformed(evt);
             }
         });
 
@@ -318,9 +321,9 @@ public class desktop_bk extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(129, 129, 129)
-                        .addComponent(Simpan1)
+                        .addComponent(btnSimpan)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cancel1))
+                        .addComponent(btnCancel))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(69, 69, 69)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -362,8 +365,8 @@ public class desktop_bk extends javax.swing.JFrame {
                         .addComponent(TP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(24, 24, 24)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Simpan1)
-                    .addComponent(cancel1))
+                    .addComponent(btnSimpan)
+                    .addComponent(btnCancel))
                 .addGap(90, 90, 90)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -411,6 +414,36 @@ public class desktop_bk extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void loadDataSiswa() {
+    try {
+        DatabaseConnection db = new DatabaseConnection();
+
+        ArrayList<Siswa> daftar = db.get_siswa();
+
+        DefaultTableModel model =
+            (DefaultTableModel) tblSiswa.getModel();
+
+        model.setRowCount(0);
+
+        for (Siswa siswa : daftar) {
+            model.addRow(new Object[]{
+                siswa.nisn,
+                siswa.nama_siswa,
+                siswa.kelas,
+                siswa.total_poin
+            });
+        }
+
+        db.close();
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this,
+            "Gagal mengambil data: " + e.getMessage());
+    }
+}
+    
+    
+    
     private void txtNisnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNisnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNisnActionPerformed
@@ -419,7 +452,7 @@ public class desktop_bk extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_FilterActionPerformed
 
-    private void cancel1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel1ActionPerformed
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         // TODO add your handling code here:
         
     txtNisn.setText("");
@@ -428,9 +461,9 @@ public class desktop_bk extends javax.swing.JFrame {
     cmbKelas.setSelectedIndex(0);
     cmbJurusan.setSelectedIndex(0);
      
-    }//GEN-LAST:event_cancel1ActionPerformed
+    }//GEN-LAST:event_btnCancelActionPerformed
 
-    private void Simpan1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Simpan1ActionPerformed
+    private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         // TODO add your handling code here:
        try {
 
@@ -439,7 +472,7 @@ public class desktop_bk extends javax.swing.JFrame {
              + cmbJurusan.getSelectedItem().toString();
 
     Siswa siswa = new Siswa(
-        txtNisn.getText(),
+       Integer.parseInt(txtNisn.getText()),
         txtNama.getText(),
         kelas,
             0
@@ -459,7 +492,7 @@ public class desktop_bk extends javax.swing.JFrame {
     JOptionPane.showMessageDialog(this,
         "Gagal menambahkan data: " + e.getMessage());
 }
-    }//GEN-LAST:event_Simpan1ActionPerformed
+    }//GEN-LAST:event_btnSimpanActionPerformed
 
     /**
      * @param args the command line arguments
@@ -499,9 +532,9 @@ public class desktop_bk extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> Filter;
     private javax.swing.JTextField Search;
-    private javax.swing.JButton Simpan1;
     private javax.swing.JTextField TP;
-    private javax.swing.JButton cancel1;
+    private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnSimpan;
     private java.awt.Choice choice1;
     private javax.swing.JComboBox<String> cmbJurusan;
     private javax.swing.JComboBox<String> cmbKelas;
@@ -531,11 +564,11 @@ public class desktop_bk extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField kelas;
     private javax.swing.JTextField nama;
     private javax.swing.JTextField nisn;
     private javax.swing.JTextField point;
+    private javax.swing.JTable tblSiswa;
     private javax.swing.JTextField txtNama;
     private javax.swing.JTextField txtNisn;
     // End of variables declaration//GEN-END:variables

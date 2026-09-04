@@ -45,7 +45,7 @@ public class DatabaseConnection {
         try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet hasil = stmt.executeQuery()) {
             while (hasil.next()) {
                 Siswa siswa = new Siswa(
-                    hasil.getString("nisn"),
+                    hasil.getInt("nisn"),
                     hasil.getString("nama_siswa"),
                     hasil.getString("kelas"),
                     hasil.getInt("total_poin")
@@ -68,7 +68,7 @@ public class DatabaseConnection {
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, siswa.nisn);
+            stmt.setInt(1, siswa.nisn);
             stmt.setString(2, siswa.nama_siswa);
             stmt.setString(3, siswa.kelas);
 
